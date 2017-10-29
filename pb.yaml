@@ -1,0 +1,31 @@
+coins:
+  long:
+    OMG: 6
+    XRP: 0.3
+    ETC: 25
+    BTC: 7500
+    ETH: 400
+    XMR: 60
+    NEO: 22
+    GAS: 30
+    STEEM: 2.50
+    STORJ: 0.50
+    PPY: 5
+    FCT: 50
+    LKK: 0.1
+    ZEN: 20
+  short:
+    ICN: 1.25
+    BTS: 0.4
+    MAID: 0.5
+    OMNI: 60
+    DASH: 140
+    ANT: 2.50
+    XEM: 0.30
+    WINGS: 0.50
+    LSK: 1.50
+    WAVES: 4
+    BAT: 0.35
+    SYS: 0.3
+    XZC: 20
+    GNT: 0.6
