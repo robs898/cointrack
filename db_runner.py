@@ -5,23 +5,23 @@ import requests
 import pandas as pd
 import os.path
 
-def read_pb_yaml():
-  with open("pb.yaml", 'r') as pb_coins_yaml:
+def read_my_yaml():
+  with open("coinstotrack.yaml", 'r') as coins_yaml:
     try:
-      y = yaml.load(pb_coins_yaml)
+      y = yaml.load(coins_yaml)
       return y
     except yaml.YAMLError as exc:
       print(exc)
 
-def populate(pb_coins, pb_type, cmc_coin_json):
+def populate(my_coins, my_type, cmc_coin_json):
   coin_list = []
-  for pb_coin_symbol, pb_coin_limit in pb_coins.iteritems():
+  for my_coin_symbol, my_coin_limit in my_coins.iteritems():
     for cmc_coin in cmc_coin_json:
-      if pb_coin_symbol == cmc_coin['symbol']:
+      if my_coin_symbol == cmc_coin['symbol']:
         price = float(cmc_coin['price_usd'])
         coin_info = {}
-        coin_info['symbol'] = pb_coin_symbol
-	roi = (float(pb_coin_limit) - price) / price
+        coin_info['symbol'] = my_coin_symbol
+	roi = (float(my_coin_limit) - price) / price
 	coin_info['roi'] = round(roi, 2)
         coin_list.append(coin_info)
   return coin_list
@@ -65,10 +65,10 @@ def populate_db(coins):
     db.commit()
     db.close()
 
-#get coins from pb yaml
-pb_yaml = read_pb_yaml()
-long_coins = pb_yaml['coins']['long']
-short_coins = pb_yaml['coins']['short']
+#get coins from my yaml
+my_yaml = read_my_yaml()
+long_coins = my_yaml['coins']['long']
+short_coins = my_yaml['coins']['short']
 
 #get coins from cmc
 cmc_request = requests.get("https://api.coinmarketcap.com/v1/ticker/?limit=200")
@@ -82,16 +82,9 @@ short_coin_list = populate(short_coins, 'short', cmc_coin_json)
 all_coin_list = long_coin_list + short_coin_list
 
 #create db if doesnt exist
-if os.path.exists('coinsdb'):
-  print('coindb already exists, continuing...')
-else:
+if not os.path.exists('coinsdb'):
   create_table(all_coin_list)
-
-#check db
-check_db()
 
 #populate db
 populate_db(all_coin_list)
 
-#check db
-check_db()
